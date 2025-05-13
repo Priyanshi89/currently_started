@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    
+    // Input the heights array
+    int a[n];
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+    
+    int k;
+    cin >> k;
+    
+    // Use a small array of size k+1 for DP
+    vector<long long> dp(k + 1, 1e9); // Initialize with a large value
+    dp[0] = 0; // Base case: cost to reach step 0 is 0
+    
+    // For each step i from 1 to n-1
+    for (int i = 1; i < n; i++) {
+        long long minSteps = 1e9; // Initialize min cost to reach step i
+        
+        // Look at the previous k steps (from max(0, i-k) to i-1)
+        for (int j = 1; j <= k; j++) {
+            if (i - j >= 0) { // Ensure we don't go before step 0
+                // Cost to jump from step (i-j) to step i
+                long long jump = dp[(i - j) % (k + 1)] + abs(a[i] - a[i - j]);
+                minSteps = min(minSteps, jump);
+            }
+        }
+        // Store the result for step i in the circular buffer
+        dp[i % (k + 1)] = minSteps;
+    }
+    
+    // Output the minimum cost to reach step n-1
+    cout << dp[(n - 1) % (k + 1)] << endl;
+    return 0;
+}
