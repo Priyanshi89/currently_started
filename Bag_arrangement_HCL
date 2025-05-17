@@ -1,0 +1,108 @@
+Problem Statement
+Several Bags have been placed on a table having a character on each bag. The task is to arrange the bags in such a manner that if the bags are placed in a reverse order, the string formed by the bag's characters are same as when the bags are in original order.
+
+Find the size of such maximum number of bags that can be arranged.
+
+Note: S consists of lowercase and/or uppercase English letters only.
+
+
+
+Input :  The first line of input consists of a string of alphabetical letters.
+output :  Print an integer value which represents the maximum number of bags that can be arranged.
+
+
+1 <= S.length <= 10^4
+
+input : abccccdd
+
+output : 7
+
+code written by me 
+#include <iostream>
+#include <string>
+#include <unordered_map>
+
+using namespace std;
+
+
+int user_logic(const string& s) {
+    unordered_map<char, int> my_map;
+    bool has_odd = false;
+    int count = 0;
+    for(auto i : s){
+        my_map[i]++;
+    }
+    for(auto j : my_map){
+        if(j.second % 2 == 0){
+            count = count + j.second;
+        }
+        else {
+            has_odd = true;
+
+        }
+        }
+        if(has_odd){
+            count = count +1;
+        }
+    
+
+
+    
+    return count;  
+}
+
+int main() {
+    string s;
+    cin >> s;
+
+    // Call user logic function and print the output
+    int result = user_logic(s);
+    cout << result << endl;
+
+    return 0;
+}
+
+
+#include <iostream>
+#include <string>
+#include <unordered_map>
+
+using namespace std;
+
+
+int user_logic(const string& s) {
+    unordered_map<char, int> my_map;
+    bool has_odd = false;
+    int count = 0;
+    for(auto i : s){
+        my_map[i]++;
+    }
+    for (auto j : my_map) {
+        int freq = j.second;
+        count += (freq / 2) * 2;
+        if (freq % 2 == 1) {
+            has_odd = true;
+        }
+    }
+    
+        if(has_odd){
+            count = count +1;
+        }
+    
+
+
+    
+    return count;  
+}
+
+int main() {
+    string s;
+    cin >> s;
+
+    // Call user logic function and print the output
+    int result = user_logic(s);
+    cout << result << endl;
+
+    return 0;
+}
+
