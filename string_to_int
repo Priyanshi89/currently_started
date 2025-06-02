@@ -1,0 +1,77 @@
+Implement the myAtoi(string s) function, which converts a string to a 32-bit signed integer.
+
+The algorithm for myAtoi(string s) is as follows:
+
+Whitespace: Ignore any leading whitespace (" ").
+Signedness: Determine the sign by checking if the next character is '-' or '+', assuming positivity if neither present.
+Conversion: Read the integer by skipping leading zeros until a non-digit character is encountered or the end of the string is reached. If no digits were read, then the result is 0.
+Rounding: If the integer is out of the 32-bit signed integer range [-231, 231 - 1], then round the integer to remain in the range. Specifically, integers less than -231 should be rounded to -231, and integers greater than 231 - 1 should be rounded to 231 - 1.
+Return the integer as the final result.
+
+
+
+#include <string>
+#include <cctype>
+
+using namespace std;
+
+class Solution {
+private:
+    // Recursive helper function to process the string
+    long long convert(string& s, int index, bool isNegative, long long result) {
+        // Base case: end of string or non-digit character
+        if (index >= s.length() || !isdigit(s[index])) {
+            return isNegative ? -result : result;
+        }
+
+        // Calculate new result by multiplying by 10 and adding current digit
+        result = result * 10 + (s[index] - '0');
+
+        // Check for 32-bit integer overflow
+        if (result > (long long)INT_MAX + (isNegative ? 1 : 0)) {
+            return isNegative ? INT_MIN : INT_MAX;
+        }
+
+        // Recursive call for next character
+        return convert(s, index + 1, isNegative, result);
+    }
+
+public:
+    int myAtoi(string s) {
+        int i = 0;
+        // Step 1: Ignore leading whitespace
+        while (i < s.length() && s[i] == ' ') {
+            i++;
+        }
+
+        // Step 2: Check for sign
+        bool isNegative = false;
+        if (i < s.length() && (s[i] == '+' || s[i] == '-')) {
+            isNegative = (s[i] == '-');
+            i++;
+        }
+
+        // Step 3: Skip leading zeros
+        while (i < s.length() && s[i] == '0') {
+            i++;
+        }
+
+        // Step 4: If no digits, return 0
+        if (i >= s.length() || !isdigit(s[i])) {
+            return 0;
+        }
+
+        // Step 5: Start recursive conversion
+        long long result = convert(s, i, isNegative, 0);
+
+        // Step 6: Handle 32-bit integer bounds
+        if (result < INT_MIN) {
+            return INT_MIN;
+        }
+        if (result > INT_MAX) {
+            return INT_MAX;
+        }
+
+        return static_cast<int>(result);
+    }
+};
