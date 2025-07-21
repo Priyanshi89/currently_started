@@ -1,0 +1,36 @@
+#include <stack>
+
+class Solution {
+public:
+    void reverseStack(std::stack<int>& s) {
+        // Base case: empty or single-element stack is already reversed
+        if (s.empty() || s.size() == 1) {
+            return;
+        }
+        
+        // Pop top element
+        int temp = s.top();
+        s.pop();
+        
+        // Recursively reverse the remaining stack
+        reverseStack(s);
+        
+        // Insert popped element at the bottom
+        insertAtBottom(s, temp);
+    }
+    
+private:
+    void insertAtBottom(std::stack<int>& s, int value) {
+        // Base case: if stack is empty, push the value
+        if (s.empty()) {
+            s.push(value);
+            return;
+        }
+        
+        // Pop top element, insert value at bottom, push top back
+        int top = s.top();
+        s.pop();
+        insertAtBottom(s, value);
+        s.push(top);
+    }
+};
